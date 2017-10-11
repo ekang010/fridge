@@ -1,0 +1,82 @@
+---
+title: "615 EDA Project"
+author: "Edward Kang"
+date: "October 4, 2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r, echo= FALSE}
+setwd("C:/Users/Edwar/Desktop/MA 615/project")
+fridge <- read.csv("housingunit.csv", header = TRUE, skip = 4)
+fridge <- subset(fridge, select = -2)
+fridge <- fridge[97:161,]
+
+library(tidyverse)
+library(plyr)
+library(dplyr)
+library(tidyr)
+```
+
+```{r, echo = FALSE}
+fridge <- rename(fridge, c("Single.family.detached" = "SingleDetached", "Single.family.attached" = "SingleAttached", "Apartment...2..to.4.unit.building." = "2 to 4 Unit Apt", "Apartment...5.or.more.unit.building." = "5 or More Unit Apt", "Mobile.home" = "Mobile Home"))
+rownames(fridge) <- 1:nrow(fridge)
+fridge[fridge == "Q"] <- ""
+fridge[fridge == "N"] <- ""
+```
+
+
+```{r}
+#Subsetting the Data
+q1 <- fridge[3:4,]
+q2 <- fridge[7:11,]
+q3 <- fridge[22:27,]
+q4 <- fridge[37:41,]
+q5 <- fridge[52:57,]
+```
+
+#How Many Fridges Owned by Type of Home
+```{r}
+q1 <- q1 %>% gather('SingleDetached', 'SingleAttached', '2 to 4 Unit Apt', '5 or More Unit Apt', 'Mobile Home', key = "type", value = "value",  na.rm = FALSE)
+ggplot(q1,aes(x=X,y=value,fill=factor(type)))+
+  geom_bar(stat="identity",position="dodge")+
+  xlab("Number of Fridges")+ylab("Count (in millions)")
+```
+
+#Size of Main Fridge by Type of Home 
+```{r}
+q2 <- q2 %>% gather('SingleDetached', 'SingleAttached', '2 to 4 Unit Apt', '5 or More Unit Apt', 'Mobile Home', key = "type", value = "value",  na.rm = FALSE)
+ggplot(q2,aes(x=X,y=value,fill=factor(type)))+
+  geom_bar(stat="identity",position="dodge")+
+  xlab("Fridge Size")+ylab("Count (in millions)")
+```
+
+#Age of Most Used Fridge by Type of Home
+```{r}
+q3 <- q3 %>% gather('SingleDetached', 'SingleAttached', '2 to 4 Unit Apt', '5 or More Unit Apt', 'Mobile Home', key = "type", value = "value",  na.rm = FALSE)
+ggplot(q3,aes(x=X,y=value,fill=factor(type)))+
+  geom_bar(stat="identity",position="dodge")+
+  xlab("Age of Main Fridge")+ylab("Count (in millions)")
+```
+
+#Size of Second Fridge by Type of Home
+```{r}
+q4 <- q4 %>% gather('SingleDetached', 'SingleAttached', '2 to 4 Unit Apt', '5 or More Unit Apt', 'Mobile Home', key = "type", value = "value",  na.rm = FALSE)
+ggplot(q4,aes(x=X,y=value,fill=factor(type)))+
+  geom_bar(stat="identity",position="dodge")+
+  xlab("Size of Second Fridge")+ylab("Count (in millions)")
+```
+
+#Age of Second Fridge by Type of Home
+```{r}
+q5 <- q5 %>% gather('SingleDetached', 'SingleAttached', '2 to 4 Unit Apt', '5 or More Unit Apt', 'Mobile Home', key = "type", value = "value",  na.rm = FALSE)
+ggplot(q5,aes(x=X,y=value,fill=factor(type)))+
+  geom_bar(stat="identity",position="dodge")+
+  xlab("Age of Second Fridge")+ylab("Count (in millions)")
+```
+
